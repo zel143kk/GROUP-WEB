@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SFHS Emergency Alert</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+    <div class="brand">
+
+        <!-- YOUR LOGO -->
+        <img src="logo.jpg" alt="SFHS Emergency Logo">
+
+        <div class="brand-text">
+            <h2>SFHS Emergency Alert</h2>
+            <p>San Francisco High School</p>
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="#home" class="active">Home</a>
+
+        <a href="#announcements">
+            Announcement
+        </a>
+
+        <a href="#events">
+            School Events
+        </a>
+
+        <a href="#emergency">
+            Emergency Alert
+        </a>
+
+    </div>
+
+
+    <div class="live-status">
+        <span class="live-dot"></span>
+        Live
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="monitor-badge">
+            <span></span>
+            LIVE SCHOOL SAFETY MONITOR
+        </div>
+
+        <h1>
+            School Emergency<br>
+            Alert System
+        </h1>
+
+        <p>
+           The system is designed to monitor and display verified official
+           announcements and weather-related safety information.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#emergency" class="btn btn-red">
+                🚨 EMERGENCY ALERT
+            </a>
+
+            <a href="#announcements" class="btn btn-white">
+                View Announcements
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIVE WEATHER -->
+
+    <div class="weather-card">
+
+        <div class="weather-header">
+
+            <h3>
+                Live Weather • Quezon City, PH
+            </h3>
+
+            <span class="weather-live">
+                LIVE
+            </span>
+
+        </div>
+
+
+        <div class="weather-main">
+
+            <div class="weather-temperature">
+
+                <div class="weather-icon" id="weatherIcon">
+                    🌤️
+                </div>
+
+                <div>
+                    <div class="temperature">
+                        <span id="temperature">--</span>°C
+                    </div>
+
+                    <div class="weather-condition"
+                         id="condition">
+                        Loading...
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="weather-details">
+
+                <div>
+                     Humidity:
+                    <strong id="humidity">--</strong>%
+                </div>
+
+                <div>
+                     Wind:
+                    <strong id="wind">--</strong> km/h
+                </div>
+
+                <div>
+                    ️ Rain:
+                    <strong id="rain">--</strong> mm
+                </div>
+
+                <div>
+                    ️ Feels:
+                    <strong id="feels">--</strong>°C
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="rain-alert">
+
+            ⚠️
+            <strong id="rainTitle">
+                Weather Monitoring
+            </strong>
+
+            <p id="rainMessage">
+                Checking current weather conditions...
+            </p>
+
+        </div>
+
+
+        <div class="forecast" id="forecast">
+
+            <!-- JavaScript will insert forecast -->
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     QUEZON CITY SAFETY STATUS
+========================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+             Quezon City Safety Status
+        </h2>
+
+        <p>
+            Monitoring official announcements and weather conditions.
+        </p>
+
+    </div>
+
+
+    <div class="status-grid">
+
+
+        <!-- CLASS SUSPENSION -->
+
+        <div class="card">
+
+            <h3>
+                Latest Class Suspension
+            </h3>
+
+            <img
+                src="class.jpg"
+                class="suspension-image"
+                alt="Class Suspension"
+            >
+
+        </div>
+
+
+        <!-- WEATHER -->
+
+        <div class="card">
+
+            <h3>
+                Live Weather
+            </h3>
+
+            <p>
+                 Quezon City, Philippines
+            </p>
+
+            <br>
+
+            <strong>
+                Current Temperature:
+            </strong>
+
+            <span id="statusTemperature">
+                Loading...
+            </span>
+
+            <br><br>
+
+            <strong>
+                Condition:
+            </strong>
+
+            <span id="statusCondition">
+                Loading...
+            </span>
+
+            <br><br>
+
+            <strong>
+                Rain:
+            </strong>
+
+            <span id="statusRain">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <!-- SYSTEM -->
+
+        <div class="card">
+
+            <h3>
+                System Status
+            </h3>
+
+            <div class="system-status">
+
+                <span class="online-dot"></span>
+
+                <strong>
+                    Online
+                </strong>
+
+            </div>
+
+            <br>
+
+            <p>
+                All systems operational.
+            </p>
+
+            <br>
+
+            <strong style="color:#14a34a;">
+                Monitoring active
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     ANNOUNCEMENTS
+========================= -->
+
+<section
+    class="section"
+    id="announcements"
+>
+
+    <div class="section-title">
+
+        <h2>
+             Announcements
+        </h2>
+
+        <p>
+            Official and school safety announcements.
+        </p>
+
+    </div>
+
+
+    <div class="announcement-grid">
+
+
+        <div class="announcement-card">
+
+            <img
+                src="class.jpg"
+                alt="Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    Class Suspension
+                </h3>
+
+                <p>
+                    Please monitor official announcements
+                    regarding class suspension.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="announcement-card">
+
+            <img
+                src="qc.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="announcement-card">
+
+            <img
+                src="11.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="announcement-card">
+
+            <img
+                src="10.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="announcement-card">
+
+            <img
+                src="7.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="announcement-card">
+
+            <div class="announcement-text">
+
+                <h3>
+                    🔄 Loading announcements...
+                </h3>
+
+                <p>
+                    Connecting to the Quezon City
+                    announcement service.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     SCHOOL EVENTS
+========================= -->
+
+<section
+    class="section events-section"
+    id="events"
+>
+
+    <div class="section-title">
+
+        <h2>
+             School Events
+        </h2>
+
+        <p>
+            Upcoming school activities and safety drills.
+        </p>
+
+    </div>
+
+
+    <div class="events-grid">
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                July 27, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>ICYM|2026</b></h3>
+
+               <a href="[facebook.com](https://www.facebook.com/photo/?fbid=1535715368567957&set=pcb.1535717268567767)" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 20, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>A NEW HOME LEARNING</b></h3>
+                <a href="[facebook.com](https://www.facebook.com/photo/?fbid=1500457402093754&set=pcb.1500457755427052)" target="_blank" class="link-btn"> Visit Announcement</a>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 18, 2026
+            </div>
+
+            <div class="event-content">
+
+                    <h3><b>2ND QUARTER NATIONAL SIMULTANEUOS EARTHQUAKE DRILL</b>(NSED)</h3>
+
+                <a href="[facebook.com](https://www.facebook.com/photo?fbid=1499579695514858&set=pcb.1499581432181351)" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 8, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>FIRST FLAG CEREMONY|SY. 2026-2027</b></h3>
+
+                <a href="[facebook.com](https://www.facebook.com/photo/?fbid=1489100746562753&set=pcb.1489101769895984)" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     AUTOMATIC EMERGENCY ALARM
+========================= -->
+
+<section
+    class="section emergency-section"
+    id="emergency"
+>
+
+    <div class="section-title">
+
+        <h2>
+             Automatic Emergency Alarm
+        </h2>
+
+        <p>
+            The prototype demonstrates how an emergency alert
+            could trigger the notification and warning system.
+        </p>
+
+    </div>
+
+
+    <div class="alarm-container">
+
+
+        <div class="alarm-header">
+
+            <h2>
+                 Automatic Monitoring
+            </h2>
+
+            <div class="monitoring-active">
+                🟢 Automatic Monitoring Active
+            </div>
+
+        </div>
+
+
+        <div class="alarm-main">
+
+
+            <!-- LOGO -->
+
+            <div class="alarm-logo">
+
+                <img
+                    src="logo.jpg"
+                    alt="Emergency Alarm Logo"
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="alarm-status">
+
+                <p>
+                    Monitoring Status
+                </p>
+
+                <h3 id="alarmStatus">
+                    ACTIVE
+                </h3>
+
+                <p>
+                    The system is currently monitoring
+                    weather conditions.
+                </p>
+
+
+                <div class="alert-types">
+
+
+                    <div class="alert-type">
+
+                        <strong>
+                            Class Suspension
+                        </strong>
+
+                        <div
+                            class="alert-state"
+                            id="suspensionState"
+                        >
+                            No suspension
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-type">
+
+                        <strong>
+                            Heavy Rain
+                        </strong>
+
+                        <div
+                            class="alert-state"
+                            id="rainState"
+                        >
+                            Monitoring
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-type">
+
+                        <strong>
+                            Fire
+                        </strong>
+
+                        <div class="alert-state">
+                            No alert
+                        </div>
+                    </div>
+
+
+                    <div class="alert-type">
+                        <strong>
+                            Earthquake
+                        </strong>
+
+                        <div class="alert-state">
+                            No alert
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="last-check">
+
+            <span>
+                🔴 Last Checked:
+                <strong id="lastChecked">
+                    --
+                </strong>
+            </span>
+
+            <span>
+                Next check: 10 minutes
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <img src="logo.jpg">
+        <div>
+
+            <strong>
+                SFHS Emergency Alert
+            </strong>
+
+            <p>
+                San Francisco High School
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <p>
+        © 2026 SFHS Emergency Alert System.
+        All rights reserved.
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
