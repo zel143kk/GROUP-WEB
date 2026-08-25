@@ -12,7 +12,7 @@ const LONGITUDE = 121.0437;
 // ==========================================
 async function getWeather() {
     try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m&timezone=Asia%2FManila`;
+        const url = `https://www.pagasa.dost.gov.ph/`;
 
         const response = await fetch(url);
 
