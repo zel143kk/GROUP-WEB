@@ -1,84 +1,159 @@
-/*
-    QUEZON CITY LOCATION
+// ==========================================
+// SCHOOL EMERGENCY ALERT SYSTEM
+// ==========================================
 
-    Latitude: 14.6511
-    Longitude: 121.0486
-*/
-
-const LATITUDE = 14.6511;
-const LONGITUDE = 121.0486;
+// Weather API coordinates for Quezon City
+const LATITUDE = 14.6760;
+const LONGITUDE = 121.0437;
 
 
-/*
-    WEATHER DESCRIPTION
-*/
+// ==========================================
+// GET LIVE WEATHER
+// ==========================================
+async function getWeather() {
+    try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LATITUDE}&longitude=${LONGITUDE}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m&timezone=Asia%2FManila`;
 
-function getWeatherDescription(code) {
+        const response = await fetch(url);
 
-    const weatherCodes = {
+        if (!response.ok) {
+            throw new Error("Unable to get weather data");
+        }
 
-        0: "Clear Sky",
+        const data = await response.json();
+        const weather = data.current;
 
-        1: "Mainly Clear",
-        2: "Partly Cloudy",
-        3: "Overcast",
+        // Get weather condition
+        const condition = getWeatherCondition(weather.weather_code);
 
-        45: "Foggy",
-        48: "Foggy",
+        // Update top weather card
+        document.getElementById("topTemperature").textContent =
+            Math.round(weather.temperature_2m) + "°C";
 
-        51: "Light Drizzle",
-        53: "Drizzle",
-        55: "Heavy Drizzle",
+        document.getElementById("topCondition").textContent = condition;
 
-        61: "Light Rain",
-        63: "Moderate Rain",
-        65: "Heavy Rain",
+        document.getElementById("humidity").textContent =
+            "Humidity: " + weather.relative_humidity_2m + "%";
 
-        71: "Light Snow",
-        73: "Snow",
-        75: "Heavy Snow",
+        document.getElementById("wind").textContent =
+            "Wind: " + weather.wind_speed_10m + " km/h";
 
-        80: "Rain Showers",
-        81: "Rain Showers",
-        82: "Heavy Rain Showers",
+        document.getElementById("rain").textContent =
+            "Rain: " + weather.rain + " mm";
 
-        95: "Thunderstorm",
-        96: "Thunderstorm",
-        99: "Severe Thunderstorm"
+        document.getElementById("feels").textContent =
+            "Feels: " + Math.round(weather.apparent_temperature) + "°C";
 
-    };
 
-    return weatherCodes[code] || "Unknown Weather";
+        // Update lower Live Weather section
+        document.getElementById("currentTemperature").textContent =
+            Math.round(weather.temperature_2m) + "°C";
+
+        document.getElementById("weatherCondition").textContent =
+            condition;
+
+        document.getElementById("rainAmount").textContent =
+            weather.rain + " mm";
+
+
+        // Weather icon
+        document.getElementById("weatherIcon").textContent =
+            getWeatherIcon(weather.weather_code);
+
+
+        // Weather monitoring message
+        const monitoringMessage =
+            document.getElementById("monitoringMessage");
+
+        if (weather.rain > 0 || weather.precipitation > 0) {
+            monitoringMessage.textContent =
+                "Rain detected. Continue monitoring weather conditions.";
+        } else {
+            monitoringMessage.textContent =
+                "Weather service connected and monitoring conditions.";
+        }
+
+
+        // Update safety status
+        updateSafetyStatus(weather);
+
+    } catch (error) {
+        console.error("Weather Error:", error);
+
+        document.getElementById("topTemperature").textContent = "--°C";
+        document.getElementById("topCondition").textContent =
+            "Weather unavailable";
+
+        document.getElementById("monitoringMessage").textContent =
+            "Unable to connect to the weather service.";
+
+        document.getElementById("systemStatus").textContent =
+            "Weather service offline";
+    }
 }
 
 
-/*
-    WEATHER ICON
-*/
+// ==========================================
+// WEATHER CONDITION
+// ==========================================
+function getWeatherCondition(code) {
 
+    const weatherCodes = {
+        0: "Clear Sky",
+        1: "Mostly Clear",
+        2: "Partly Cloudy",
+        3: "Overcast",
+        45: "Foggy",
+        48: "Foggy",
+        51: "Light Drizzle",
+        53: "Moderate Drizzle",
+        55: "Heavy Drizzle",
+        61: "Light Rain",
+        63: "Moderate Rain",
+        65: "Heavy Rain",
+        71: "Light Snow",
+        73: "Moderate Snow",
+        75: "Heavy Snow",
+        80: "Rain Showers",
+        81: "Moderate Rain Showers",
+        82: "Heavy Rain Showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with Hail",
+        99: "Severe Thunderstorm"
+    };
+
+    return weatherCodes[code] || "Unknown";
+}
+
+
+// ==========================================
+// WEATHER ICON
+// ==========================================
 function getWeatherIcon(code) {
 
-    if (code === 0) {
+    if (code === 0 || code === 1) {
         return "☀️";
     }
 
-    if (code >= 1 && code <= 3) {
-        return "🌤️";
+    if (code === 2 || code === 3) {
+        return "☁️";
     }
 
-    if (code >= 45 && code <= 48) {
-        return "🌫️";
-    }
-
-    if (code >= 51 && code <= 67) {
+    if (
+        code === 51 ||
+        code === 53 ||
+        code === 55 ||
+        code === 61 ||
+        code === 63 ||
+        code === 65 ||
+        code === 80 ||
+        code === 81 ||
+        code === 82
+    ) {
         return "🌧️";
     }
 
-    if (code >= 80 && code <= 82) {
-        return "🌧️";
-    }
-
-    if (code >= 95) {
+    if (code === 95 || code === 96 || code === 99) {
         return "⛈️";
     }
 
@@ -86,303 +161,106 @@ function getWeatherIcon(code) {
 }
 
 
-/*
-    GET LIVE WEATHER
-*/
+// ==========================================
+// SAFETY STATUS
+// ==========================================
+function updateSafetyStatus(weather) {
 
-async function getWeather() {
+    const statusElement = document.getElementById("systemStatus");
+    const safetyMessage = document.getElementById("safetyMessage");
 
-    try {
+    // Heavy rain warning
+    if (weather.rain >= 7 || weather.weather_code === 65) {
 
-        const url =
-            `[api.open-meteo.com](https://api.open-meteo.com/v1/forecast)` +
-            `?latitude=${LATITUDE}` +
-            `&longitude=${LONGITUDE}` +
-            `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m` +
-            `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
-            `&timezone=Asia%2FManila`;
+        statusElement.textContent = "⚠ Weather Alert";
 
+        safetyMessage.textContent =
+            "Heavy rain detected. Monitor official announcements.";
 
-        const response = await fetch(url);
-
-
-        if (!response.ok) {
-            throw new Error("Weather request failed");
-        }
-
-
-        const data = await response.json();
-
-
-        /*
-            CURRENT WEATHER
-        */
-
-        const current = data.current;
-
-
-        const temperature =
-            Math.round(current.temperature_2m);
-
-        const feels =
-            Math.round(current.apparent_temperature);
-
-        const humidity =
-            Math.round(current.relative_humidity_2m);
-
-        const wind =
-            Math.round(current.wind_speed_10m);
-
-        const rain =
-            current.precipitation;
-
-        const code =
-            current.weather_code;
-
-
-        const description =
-            getWeatherDescription(code);
-
-
-        const icon =
-            getWeatherIcon(code);
-
-
-        /*
-            UPDATE WEATHER CARD
-        */
-
-        document.getElementById("temperature")
-            .textContent = temperature;
-
-        document.getElementById("condition")
-            .textContent = description;
-
-        document.getElementById("weatherIcon")
-            .textContent = icon;
-
-        document.getElementById("humidity")
-            .textContent = humidity;
-
-        document.getElementById("wind")
-            .textContent = wind;
-
-        document.getElementById("rain")
-            .textContent = rain;
-
-        document.getElementById("feels")
-            .textContent = feels;
-
-
-        /*
-            UPDATE STATUS CARD
-        */
-
-        document.getElementById("statusTemperature")
-            .textContent = ` ${temperature}°C`;
-
-        document.getElementById("statusCondition")
-            .textContent = ` ${description}`;
-
-        document.getElementById("statusRain")
-            .textContent = ` ${rain} mm`;
-
-
-        /*
-            AUTOMATIC RAIN MONITORING
-        */
-
-        const rainState =
-            document.getElementById("rainState");
-
-        const rainTitle =
-            document.getElementById("rainTitle");
-
-        const rainMessage =
-            document.getElementById("rainMessage");
-
-
-        if (
-            code === 65 ||
-            code === 82 ||
-            code === 95 ||
-            code === 96 ||
-            code === 99
-        ) {
-
-            rainState.textContent =
-                "⚠️ ACTIVE";
-
-            rainState.style.color =
-                "#e12626";
-
-            rainTitle.textContent =
-                "Heavy Rain / Storm Alert";
-
-            rainMessage.textContent =
-                "Severe weather conditions detected in Quezon City.";
-
-        }
-
-        else if (
-            code >= 51 &&
-            code <= 82
-        ) {
-
-            rainState.textContent =
-                "Rain detected";
-
-            rainState.style.color =
-                "#e09b00";
-
-            rainTitle.textContent =
-                "Rain Detected";
-
-            rainMessage.textContent =
-                "Rain is currently being monitored.";
-
-        }
-
-        else {
-
-            rainState.textContent =
-                "No heavy rain";
-
-            rainState.style.color =
-                "#16a052";
-
-            rainTitle.textContent =
-                "Weather Monitoring";
-
-            rainMessage.textContent =
-                "No severe weather detected.";
-
-        }
-
-
-        /*
-            FORECAST
-        */
-
-        const forecast =
-            document.getElementById("forecast");
-
-        forecast.innerHTML = "";
-
-
-        for (
-            let i = 0;
-            i < 5;
-            i++
-        ) {
-
-            const date =
-                new Date(
-                    data.daily.time[i]
-                );
-
-
-            const day =
-                date.toLocaleDateString(
-                    "en-US",
-                    {
-                        weekday: "short"
-                    }
-                );
-
-
-            const max =
-                Math.round(
-                    data.daily.temperature_2m_max[i]
-                );
-
-
-            const min =
-                Math.round(
-                    data.daily.temperature_2m_min[i]
-                );
-
-
-            const dailyCode =
-                data.daily.weather_code[i];
-
-
-            const dailyIcon =
-                getWeatherIcon(dailyCode);
-
-
-            forecast.innerHTML += `
-
-                <div class="forecast-day">
-
-                    <strong>
-                        ${day}
-                    </strong>
-
-                    <div class="icon">
-                        ${dailyIcon}
-                    </div>
-
-                    ${max}° / ${min}°
-
-                </div>
-
-            `;
-
-        }
-
-
-        /*
-            LAST CHECKED
-        */
-
-        const now =
-            new Date();
-
-
-        document.getElementById("lastChecked")
-            .textContent =
-            now.toLocaleTimeString(
-                "en-PH",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit"
-                }
-            );
-
+        statusElement.style.color = "#d97706";
 
     }
 
-    catch (error) {
+    // Thunderstorm warning
+    else if (
+        weather.weather_code === 95 ||
+        weather.weather_code === 96 ||
+        weather.weather_code === 99
+    ) {
 
-        console.error(error);
+        statusElement.textContent = "⚠ Thunderstorm Alert";
 
-        document.getElementById("condition")
-            .textContent =
-            "Weather unavailable";
+        safetyMessage.textContent =
+            "Thunderstorm detected. Stay indoors and monitor official updates.";
 
-        document.getElementById("rainMessage")
-            .textContent =
-            "Unable to connect to the weather service.";
+        statusElement.style.color = "#dc2626";
 
     }
 
+    // Normal weather
+    else {
+
+        statusElement.textContent = "● Online";
+
+        safetyMessage.textContent =
+            "All systems operational.";
+
+        statusElement.style.color = "#2563eb";
+    }
 }
 
 
-/*
-    LOAD WEATHER
-*/
+// ==========================================
+// EMERGENCY ALERT BUTTON
+// ==========================================
+function activateEmergencyAlert() {
 
+    const confirmed = confirm(
+        "Do you want to activate the Emergency Alert?"
+    );
+
+    if (confirmed) {
+
+        alert(
+            "🚨 EMERGENCY ALERT ACTIVATED!\n\n" +
+            "Please follow school safety procedures and wait for official instructions."
+        );
+
+        document.body.classList.add("emergency-mode");
+
+        document.getElementById("systemStatus").textContent =
+            "🚨 EMERGENCY ACTIVE";
+
+        document.getElementById("safetyMessage").textContent =
+            "Emergency alert is currently active. Follow official instructions.";
+    }
+}
+
+
+// ==========================================
+// VIEW ANNOUNCEMENTS BUTTON
+// ==========================================
+function viewAnnouncements() {
+
+    const announcementSection =
+        document.getElementById("announcements");
+
+    if (announcementSection) {
+        announcementSection.scrollIntoView({
+            behavior: "smooth"
+        });
+    } else {
+        alert("No announcements are available at this time.");
+    }
+}
+
+
+// ==========================================
+// UPDATE WEATHER AUTOMATICALLY
+// ==========================================
+
+// Load weather immediately
 getWeather();
 
-
-/*
-    UPDATE EVERY 10 MINUTES
-*/
-
-setInterval(
-    getWeather,
-    10 * 60 * 1000
-);
+// Refresh every 5 minutes
+setInterval(getWeather, 300000);
