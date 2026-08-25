@@ -1,266 +1,109 @@
-// ==========================================
-// SCHOOL EMERGENCY ALERT SYSTEM
-// ==========================================
+async function getPAGASAWeather() {
 
-// Weather API coordinates for Quezon City
-const LATITUDE = 14.6760;
-const LONGITUDE = 121.0437;
-
-
-// ==========================================
-// GET LIVE WEATHER
-// ==========================================
-async function getWeather() {
     try {
-        const url = `https://www.pagasa.dost.gov.ph/`;
 
-        const response = await fetch(url);
+        // Your backend endpoint
+        const response = await fetch("/api/pagasa-weather.php");
 
         if (!response.ok) {
-            throw new Error("Unable to get weather data");
+            throw new Error("Unable to connect to PAGASA");
         }
 
         const data = await response.json();
-        const weather = data.current;
 
-        // Get weather condition
-        const condition = getWeatherCondition(weather.weather_code);
-
-        // Update top weather card
-        document.getElementById("topTemperature").textContent =
-            Math.round(weather.temperature_2m) + "°C";
-
-        document.getElementById("topCondition").textContent = condition;
-
-        document.getElementById("humidity").textContent =
-            "Humidity: " + weather.relative_humidity_2m + "%";
-
-        document.getElementById("wind").textContent =
-            "Wind: " + weather.wind_speed_10m + " km/h";
-
-        document.getElementById("rain").textContent =
-            "Rain: " + weather.rain + " mm";
-
-        document.getElementById("feels").textContent =
-            "Feels: " + Math.round(weather.apparent_temperature) + "°C";
+        console.log("PAGASA DATA:", data);
 
 
-        // Update lower Live Weather section
-        document.getElementById("currentTemperature").textContent =
-            Math.round(weather.temperature_2m) + "°C";
+        // Example values returned by your backend
+        const temperature = data.temperature;
+        const humidity = data.humidity;
+        const rainfall = data.rainfall;
+        const wind = data.wind;
+        const condition = data.condition;
+
+
+        // MAIN WEATHER CARD
+
+        document.getElementById("temperature").textContent =
+            temperature + "°C";
 
         document.getElementById("weatherCondition").textContent =
             condition;
 
-        document.getElementById("rainAmount").textContent =
-            weather.rain + " mm";
+        document.getElementById("humidity").textContent =
+            humidity;
+
+        document.getElementById("rain").textContent =
+            rainfall;
+
+        document.getElementById("wind").textContent =
+            wind;
+
+        document.getElementById("feelsLike").textContent =
+            data.feelsLike ?? "--";
 
 
-        // Weather icon
-        document.getElementById("weatherIcon").textContent =
-            getWeatherIcon(weather.weather_code);
+        // LOWER WEATHER CARD
+
+        document.getElementById("temp2").textContent =
+            temperature + "°C";
+
+        document.getElementById("condition2").textContent =
+            condition;
+
+        document.getElementById("rain2").textContent =
+            rainfall + " mm";
 
 
-        // Weather monitoring message
-        const monitoringMessage =
-            document.getElementById("monitoringMessage");
+        // WEATHER MONITORING MESSAGE
 
-        if (weather.rain > 0 || weather.precipitation > 0) {
-            monitoringMessage.textContent =
-                "Rain detected. Continue monitoring weather conditions.";
-        } else {
-            monitoringMessage.textContent =
-                "Weather service connected and monitoring conditions.";
-        }
+        document.getElementById("weatherMessage").innerHTML = `
+            <strong>✓ PAGASA Weather Monitoring</strong>
+            <p>
+                Weather information is being monitored
+                from the official PAGASA source.
+            </p>
+        `;
 
 
-        // Update safety status
-        updateSafetyStatus(weather);
+        // SYSTEM STATUS
+
+        document.getElementById("systemStatus").innerHTML = `
+            <span class="online-dot"></span>
+            Online
+        `;
+
+        document.getElementById("systemMessage").textContent =
+            "PAGASA weather monitoring active.";
+
 
     } catch (error) {
-        console.error("Weather Error:", error);
 
-        document.getElementById("topTemperature").textContent = "--°C";
-        document.getElementById("topCondition").textContent =
-            "Weather unavailable";
+        console.error(error);
 
-        document.getElementById("monitoringMessage").textContent =
-            "Unable to connect to the weather service.";
+        document.getElementById("weatherMessage").innerHTML = `
+            <strong>⚠ PAGASA Weather Monitoring</strong>
+            <p>
+                Unable to retrieve the latest PAGASA data.
+                Please check the official PAGASA website.
+            </p>
+        `;
 
-        document.getElementById("systemStatus").textContent =
-            "Weather service offline";
+        document.getElementById("weatherCondition").textContent =
+            "Unavailable";
+
+        document.getElementById("condition2").textContent =
+            "Unavailable";
     }
 }
 
 
-// ==========================================
-// WEATHER CONDITION
-// ==========================================
-function getWeatherCondition(code) {
-
-    const weatherCodes = {
-        0: "Clear Sky",
-        1: "Mostly Clear",
-        2: "Partly Cloudy",
-        3: "Overcast",
-        45: "Foggy",
-        48: "Foggy",
-        51: "Light Drizzle",
-        53: "Moderate Drizzle",
-        55: "Heavy Drizzle",
-        61: "Light Rain",
-        63: "Moderate Rain",
-        65: "Heavy Rain",
-        71: "Light Snow",
-        73: "Moderate Snow",
-        75: "Heavy Snow",
-        80: "Rain Showers",
-        81: "Moderate Rain Showers",
-        82: "Heavy Rain Showers",
-        95: "Thunderstorm",
-        96: "Thunderstorm with Hail",
-        99: "Severe Thunderstorm"
-    };
-
-    return weatherCodes[code] || "Unknown";
-}
+// Load PAGASA weather
+getPAGASAWeather();
 
 
-// ==========================================
-// WEATHER ICON
-// ==========================================
-function getWeatherIcon(code) {
-
-    if (code === 0 || code === 1) {
-        return "☀️";
-    }
-
-    if (code === 2 || code === 3) {
-        return "☁️";
-    }
-
-    if (
-        code === 51 ||
-        code === 53 ||
-        code === 55 ||
-        code === 61 ||
-        code === 63 ||
-        code === 65 ||
-        code === 80 ||
-        code === 81 ||
-        code === 82
-    ) {
-        return "🌧️";
-    }
-
-    if (code === 95 || code === 96 || code === 99) {
-        return "⛈️";
-    }
-
-    return "🌤️";
-}
-
-
-// ==========================================
-// SAFETY STATUS
-// ==========================================
-function updateSafetyStatus(weather) {
-
-    const statusElement = document.getElementById("systemStatus");
-    const safetyMessage = document.getElementById("safetyMessage");
-
-    // Heavy rain warning
-    if (weather.rain >= 7 || weather.weather_code === 65) {
-
-        statusElement.textContent = "⚠ Weather Alert";
-
-        safetyMessage.textContent =
-            "Heavy rain detected. Monitor official announcements.";
-
-        statusElement.style.color = "#d97706";
-
-    }
-
-    // Thunderstorm warning
-    else if (
-        weather.weather_code === 95 ||
-        weather.weather_code === 96 ||
-        weather.weather_code === 99
-    ) {
-
-        statusElement.textContent = "⚠ Thunderstorm Alert";
-
-        safetyMessage.textContent =
-            "Thunderstorm detected. Stay indoors and monitor official updates.";
-
-        statusElement.style.color = "#dc2626";
-
-    }
-
-    // Normal weather
-    else {
-
-        statusElement.textContent = "● Online";
-
-        safetyMessage.textContent =
-            "All systems operational.";
-
-        statusElement.style.color = "#2563eb";
-    }
-}
-
-
-// ==========================================
-// EMERGENCY ALERT BUTTON
-// ==========================================
-function activateEmergencyAlert() {
-
-    const confirmed = confirm(
-        "Do you want to activate the Emergency Alert?"
-    );
-
-    if (confirmed) {
-
-        alert(
-            "🚨 EMERGENCY ALERT ACTIVATED!\n\n" +
-            "Please follow school safety procedures and wait for official instructions."
-        );
-
-        document.body.classList.add("emergency-mode");
-
-        document.getElementById("systemStatus").textContent =
-            "🚨 EMERGENCY ACTIVE";
-
-        document.getElementById("safetyMessage").textContent =
-            "Emergency alert is currently active. Follow official instructions.";
-    }
-}
-
-
-// ==========================================
-// VIEW ANNOUNCEMENTS BUTTON
-// ==========================================
-function viewAnnouncements() {
-
-    const announcementSection =
-        document.getElementById("announcements");
-
-    if (announcementSection) {
-        announcementSection.scrollIntoView({
-            behavior: "smooth"
-        });
-    } else {
-        alert("No announcements are available at this time.");
-    }
-}
-
-
-// ==========================================
-// UPDATE WEATHER AUTOMATICALLY
-// ==========================================
-
-// Load weather immediately
-getWeather();
-
-// Refresh every 5 minutes
-setInterval(getWeather, 300000);
+// Refresh every 10 minutes
+setInterval(
+    getPAGASAWeather,
+    10 * 60 * 1000
+);
