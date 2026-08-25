@@ -1,940 +1,915 @@
+img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
 
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 html {
     scroll-behavior: smooth;
 }
 
-
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f3f8fc;
-    color: #4c5678;
+    background: #f4f7fb;
+    color: #1f2937;
 }
 
 
-.navbar {
-    height: 58px;
-    background: #50577c;
-    color: white;
+/* ================= NAVIGATION ================= */
 
-    display: flex;
-    align-items: center;
-
-    padding: 0 8%;
-
-    gap: 30px;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,.2);
-
+header {
     position: sticky;
     top: 0;
 
     z-index: 1000;
+
+    background: #0f3d56;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.15);
 }
 
+.navbar {
+    max-width: 1200px;
 
-.logo-area {
+    margin: auto;
+
+    padding: 15px 25px;
+
     display: flex;
+
     align-items: center;
 
-    gap: 8px;
-
-    flex: 1;
+    justify-content: space-between;
 }
 
+.logo {
+    display: flex;
 
-.logo-circle {
-    width: 32px;
-    height: 32px;
+    align-items: center;
+
+    gap: 10px;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
 
     border-radius: 50%;
 
-    background: #eaf1f8;
+    background: #ef4444;
 
     display: flex;
-    align-items: center;
+
     justify-content: center;
+
+    align-items: center;
 }
 
-
-.logo-area strong {
-    display: block;
-    font-size: 12px;
-}
-
-
-.logo-area small {
-    display: block;
-    font-size: 8px;
-    opacity: .7;
-}
-
-
-nav {
+.nav-links {
     display: flex;
-    gap: 30px;
+
+    list-style: none;
+
+    gap: 8px;
 }
 
-
-nav a {
+.nav-links a {
     color: white;
+
     text-decoration: none;
 
-    font-size: 9px;
-    font-weight: bold;
-}
-
-
-.live-status {
-    background: #15952c;
-
-    padding: 6px 12px;
-
-    border-radius: 5px;
-
-    font-size: 9px;
-    font-weight: bold;
-}
-
-
-
-/* HERO */
-
-.hero {
-    min-height: 270px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 40px 9%;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,255,255,.8),
-            transparent 50%
-        ),
-        #eef6fb;
-}
-
-
-.hero-content {
-    max-width: 500px;
-}
-
-
-.monitor-label {
-    display: inline-block;
-
-    background: #d8f6e7;
-
-    color: #40556d;
-
-    padding: 7px 12px;
-
-    border-radius: 20px;
-
-    font-size: 9px;
-    font-weight: bold;
-}
-
-
-.hero h1 {
-    margin-top: 15px;
-
-    font-size: 34px;
-
-    line-height: 1;
-
-    color: #4e577d;
-}
-
-
-.hero p {
-    margin-top: 18px;
-
-    color: #58708a;
-
-    line-height: 1.7;
-
-    font-size: 13px;
-
-    max-width: 470px;
-}
-
-
-.hero-buttons {
-    margin-top: 25px;
-
-    display: flex;
-
-    gap: 12px;
-}
-
-
-button {
-    cursor: pointer;
-
-    border: 0;
-
-    font-weight: bold;
-}
-
-
-.emergency-button {
-    background: #a9b8ce;
-
-    color: white;
-
-    padding: 12px 25px;
-
-    border-radius: 6px;
-}
-
-
-.announcement-button {
-    background: white;
-
-    color: #50577c;
-
-    border: 1px solid #526181;
-
-    padding: 12px 25px;
-
-    border-radius: 6px;
-}
-
-
-
-/* WEATHER */
-
-.weather-card {
-    width: 300px;
-
-    min-height: 195px;
-
-    background: #183f5e;
-
-    color: white;
-
-    border-radius: 15px;
-
-    padding: 20px;
-
-    box-shadow:
-        0 15px 30px rgba(25,55,80,.2);
-}
-
-
-.weather-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    font-size: 13px;
-}
-
-
-.weather-live {
-    background: #3e5879;
-
-    padding: 4px 8px;
-
-    border-radius: 10px;
-
-    font-size: 8px;
-}
-
-
-.weather-main {
-    margin-top: 22px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-}
-
-
-.weather-icon {
-    font-size: 38px;
-}
-
-
-.temperature {
-    font-size: 29px;
-
-    font-weight: bold;
-}
-
-
-.condition {
-    font-size: 11px;
-
-    font-weight: bold;
-
-    margin-top: 4px;
-}
-
-
-.weather-details {
-    margin-left: auto;
-
-    font-size: 9px;
-
-    line-height: 2;
-}
-
-
-.weather-message {
-    background: #102f47;
-
-    padding: 12px;
+    padding: 11px 15px;
 
     border-radius: 7px;
 
-    margin-top: 13px;
+    font-weight: bold;
+}
 
-    font-size: 10px;
+.nav-links a:hover,
+.nav-links a.active {
+    background: #1d617f;
+}
+
+.menu-btn {
+    display: none;
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
 }
 
 
-.weather-message strong {
-    color: #ffd400;
+/* ================= HERO ================= */
+
+.hero {
+    min-height: 470px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f3d56,
+            #176b87
+        );
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 900px;
+
+    margin: auto;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.live-badge {
+    display: inline-block;
+
+    background: rgba(255,255,255,0.15);
+
+    padding: 9px 15px;
+
+    border-radius: 20px;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.hero h1 {
+    font-size: 46px;
+
+    margin-bottom: 18px;
+}
+
+.hero p {
+    max-width: 700px;
+
+    margin: auto;
+
+    line-height: 1.7;
+
+    font-size: 18px;
+}
+
+.hero-buttons {
+    margin-top: 30px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
 }
 
 
-.weather-message p {
-    margin-top: 5px;
+/* ================= BUTTONS ================= */
 
-    color: #75879a;
-}
+.btn {
+    padding: 14px 25px;
 
+    border-radius: 8px;
 
-.pagasa-link {
-    display: block;
+    border: none;
 
-    color: #b9d8f1;
+    cursor: pointer;
 
-    font-size: 9px;
+    font-weight: bold;
 
-    margin-top: 10px;
+    font-size: 16px;
 
     text-decoration: none;
+
+    display: inline-block;
+}
+
+.btn-emergency {
+    background: #ef4444;
+
+    color: white;
+
+    animation: pulse 2s infinite;
+}
+
+.btn-emergency:hover {
+    background: #dc2626;
+}
+
+.btn-info {
+    background: white;
+
+    color: #0f3d56;
+}
+
+@keyframes pulse {
+
+    0% {
+        box-shadow:
+            0 0 0 0 rgba(239,68,68,0.7);
+    }
+
+    70% {
+        box-shadow:
+            0 0 0 18px rgba(239,68,68,0);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 0 rgba(239,68,68,0);
+    }
+
 }
 
 
+/* ================= GENERAL ================= */
 
-/* SECTIONS */
+section {
+    padding: 70px 20px;
 
-.safety-section,
-.announcements,
-.events,
-.emergency-section {
-    padding: 55px 9%;
+    scroll-margin-top: 70px;
 }
 
+.container {
+    max-width: 1100px;
+
+    margin: auto;
+}
 
 .section-title {
     text-align: center;
 
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
-
 
 .section-title h2 {
-    font-size: 20px;
+    color: #0f3d56;
 
-    color: #3f5477;
+    font-size: 32px;
+
+    margin-bottom: 10px;
 }
-
 
 .section-title p {
-    margin-top: 6px;
-
-    font-size: 11px;
-
-    color: #333;
+    color: #6b7280;
 }
 
 
+/* ================= QC STATUS ================= */
 
-/* STATUS */
+.qc-status-section {
+    background: #eef7fb;
+}
 
 .status-grid {
     display: grid;
 
     grid-template-columns:
-        1fr 1.5fr 1fr;
+        repeat(3, 1fr);
 
-    gap: 10px;
-
-    max-width: 950px;
-
-    margin: auto;
+    gap: 20px;
 }
-
 
 .status-card {
     background: white;
 
+    padding: 25px;
+
     border-radius: 12px;
 
-    padding: 18px;
+    display: flex;
 
-    min-height: 130px;
+    align-items: center;
+
+    gap: 18px;
 
     box-shadow:
-        0 4px 15px rgba(0,0,0,.08);
+        0 5px 20px rgba(0,0,0,0.07);
 }
 
+.status-icon {
+    font-size: 40px;
+}
 
 .status-card h3 {
-    font-size: 13px;
+    color: #0f3d56;
 
-    margin-bottom: 14px;
+    margin-bottom: 8px;
 }
-
 
 .status-card p {
-    font-size: 11px;
+    color: #6b7280;
 
-    line-height: 2;
+    line-height: 1.5;
+}
+
+.status-card.warning {
+    border-left: 6px solid #f59e0b;
+}
+
+.status-card.danger {
+    border-left: 6px solid #dc2626;
 }
 
 
-.status-card img {
-    width: 100%;
+/* ================= ANNOUNCEMENTS ================= */
 
-    height: 95px;
-
-    object-fit: cover;
-
-    border-radius: 7px;
+#announcement {
+    background: white;
 }
-
-
-.online {
-    font-weight: bold;
-}
-
-
-.monitoring {
-    display: block;
-
-    color: #0aa53d;
-
-    margin-top: 8px;
-
-    font-size: 11px;
-}
-
-
-.source-text {
-    display: block;
-
-    margin-top: 12px;
-
-    color: #15952c;
-}
-
-
-
-/* ANNOUNCEMENTS */
-
-.announcements {
-    background: #f4f9fd;
-}
-
 
 .announcement-grid {
-    max-width: 1000px;
-
-    margin: auto;
-
     display: grid;
 
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 10px;
+    gap: 20px;
 }
-
 
 .announcement-card {
-    background: white;
+    background: #f8fafc;
 
-    border-radius: 8px;
+    padding: 25px;
 
-    overflow: hidden;
+    border-radius: 10px;
 
-    box-shadow:
-        0 3px 10px rgba(0,0,0,.08);
+    border-left: 5px solid #176b87;
 }
-
-
-.announcement-card img {
-    width: 100%;
-
-    height: 150px;
-
-    object-fit: cover;
-}
-
-
-.announcement-card div {
-    padding: 12px;
-}
-
 
 .announcement-card h3 {
-    font-size: 11px;
-}
+    color: #0f3d56;
 
+    margin-bottom: 10px;
+}
 
 .announcement-card p {
-    font-size: 9px;
+    color: #4b5563;
 
-    color: #8995a2;
+    line-height: 1.6;
+}
 
-    margin-top: 7px;
+.announcement-card a {
+    display: inline-block;
+
+    margin-top: 15px;
+
+    color: #176b87;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+.date {
+    display: block;
+
+    margin-top: 15px;
+
+    color: #176b87;
+
+    font-size: 13px;
+
+    font-weight: bold;
 }
 
 
-.loading-card {
-    padding: 20px;
-}
+/* ================= EVENTS ================= */
 
-
-
-/* EVENTS */
-
-.events {
-    background: #edf6fc;
-}
-
-
-.event-grid {
-    max-width: 950px;
-
-    margin: auto;
-
+.events-grid {
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(3, 1fr);
 
-    gap: 10px;
+    gap: 20px;
 }
-
 
 .event-card {
     background: white;
 
-    border-radius: 7px;
+    border-radius: 12px;
 
     overflow: hidden;
 
-    padding-bottom: 15px;
-
     box-shadow:
-        0 4px 10px rgba(0,0,0,.07);
+        0 5px 20px rgba(0,0,0,0.08);
 }
 
-
-.event-card > strong {
-    display: block;
-
-    background: #40577c;
+.event-date {
+    background: #176b87;
 
     color: white;
+
+    padding: 15px;
 
     text-align: center;
 
-    padding: 8px;
+    font-weight: bold;
+}
 
-    font-size: 9px;
+.event-content {
+    padding: 25px;
+}
+
+.event-content h3 {
+    color: #0f3d56;
+
+    margin-bottom: 10px;
+}
+
+.event-content p {
+    color: #6b7280;
+
+    line-height: 1.6;
 }
 
 
-.event-card h4 {
-    font-size: 9px;
+/* ================= EMERGENCY ================= */
 
-    padding: 12px;
-
-    min-height: 55px;
+#emergency {
+    background: #fff5f5;
 }
 
-
-.event-card button {
-    background: #50577c;
-
-    color: white;
-
-    margin-left: 12px;
-
-    padding: 7px 12px;
-
-    border-radius: 5px;
-
-    font-size: 8px;
-}
-
-
-
-/* EMERGENCY */
-
-.emergency-section {
-    background: #fff6f5;
-}
-
-
-.monitor-panel {
-    max-width: 680px;
+.emergency-box {
+    max-width: 850px;
 
     margin: auto;
 
+    text-align: center;
+
     background: white;
 
-    border: 1px solid #9ca9b7;
-
-    border-radius: 10px;
-
-    padding: 15px;
-}
-
-
-.monitor-top {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-}
-
-
-.monitor-top h3 {
-    font-size: 14px;
-}
-
-
-.active-badge {
-    background: #d9f7e4;
-
-    color: #0b9c3c;
+    padding: 40px 25px;
 
     border-radius: 15px;
 
-    padding: 6px 10px;
+    border: 2px solid #fecaca;
+}
 
-    font-size: 8px;
+.emergency-icon {
+    font-size: 60px;
+
+    margin-bottom: 15px;
+}
+
+.emergency-box h2 {
+    color: #b91c1c;
+
+    margin-bottom: 10px;
+}
+
+.emergency-box p {
+    color: #6b7280;
+
+    line-height: 1.6;
+
+    margin-bottom: 25px;
 }
 
 
-.monitor-content {
-    display: flex;
+/* ================= ALARM ================= */
 
-    gap: 30px;
+.alarm-btn {
+    width: 190px;
 
-    align-items: center;
-
-    padding: 20px;
-}
-
-
-.school-icon {
-    width: 80px;
-    height: 80px;
+    height: 190px;
 
     border-radius: 50%;
 
-    background: #e9f0f7;
+    border: 10px solid #fee2e2;
 
-    border: 5px solid #4d6382;
+    background: #dc2626;
 
-    display: flex;
+    color: white;
 
-    justify-content: center;
+    font-size: 24px;
 
-    align-items: center;
+    font-weight: bold;
 
-    font-size: 35px;
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(220,38,38,0.35);
+}
+
+.alarm-btn:hover {
+    background: #b91c1c;
+
+    transform: scale(1.04);
+}
+
+.alarm-status {
+    margin-top: 25px;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    background: #f3f4f6;
+
+    font-weight: bold;
+}
+
+.alarm-status.active {
+    background: #fee2e2;
+
+    color: #b91c1c;
 }
 
 
-.monitor-info {
-    flex: 1;
-}
+/* ================= EMERGENCY TYPES ================= */
 
+.emergency-types {
+    margin-top: 35px;
 
-.monitor-info small {
-    font-size: 8px;
-
-    color: #89949e;
-}
-
-
-.monitor-info h2 {
-    font-size: 18px;
-
-    margin-top: 5px;
-}
-
-
-.monitor-info p {
-    font-size: 9px;
-
-    color: #89949e;
-}
-
-
-.alarm-grid {
     display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 5px;
+    gap: 15px;
+}
 
-    margin-top: 12px;
+.type-card {
+    padding: 20px;
+
+    background: #fafafa;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+}
+
+.type-card span {
+    display: block;
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
 }
 
 
-.alarm-grid div {
-    border: 1px solid #e2e5e8;
+/* ================= LAST UPDATE ================= */
 
-    padding: 8px;
+.last-update {
+    max-width: 850px;
+
+    margin: 20px auto 0;
+
+    padding: 15px;
 
     text-align: center;
 
-    border-radius: 5px;
+    background: white;
+
+    border-radius: 8px;
+
+    color: #6b7280;
 }
 
 
-.alarm-grid strong {
-    display: block;
-
-    font-size: 8px;
-}
-
-
-.alarm-grid small {
-    color: #1a9e4b;
-}
-
-
-.last-check {
-    border-radius: 6px;
-
-    background: #fff0ef;
-
-    padding: 8px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    font-size: 8px;
-}
-
-
-
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer {
-    background: #07304b;
+    background: #0b2d3e;
 
     color: white;
 
-    padding: 20px 8%;
+    padding: 35px 20px;
 
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
+    text-align: center;
 }
-
-
-.footer-logo {
-    display: flex;
-
-    gap: 8px;
-
-    align-items: center;
-}
-
-
-.footer-logo strong {
-    display: block;
-
-    font-size: 10px;
-}
-
-
-.footer-logo small {
-    font-size: 7px;
-}
-
 
 footer p {
-    font-size: 8px;
+    margin-top: 8px;
 
-    opacity: .7;
+    color: #cbd5e1;
 }
 
 
+/* ================= MODAL ================= */
 
-/* EMERGENCY POPUP */
-
-.emergency-overlay {
+.modal {
     position: fixed;
 
     inset: 0;
 
-    background:
-        rgba(70,0,0,.7);
+    background: rgba(0,0,0,0.75);
 
     display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 5000;
+
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    max-width: 500px;
+
+    width: 100%;
+
+    padding: 35px;
+
+    background: white;
+
+    border-radius: 15px;
+
+    text-align: center;
+
+    border-top: 10px solid #dc2626;
+}
+
+.warning {
+    font-size: 60px;
+}
+
+.modal-content h2 {
+    color: #b91c1c;
+
+    margin: 15px 0;
+}
+
+.modal-content p {
+    color: #4b5563;
+
+    line-height: 1.6;
+}
+
+.close-btn {
+    margin-top: 20px;
+
+    padding: 12px 25px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #0f3d56;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+    .menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+
+        top: 72px;
+
+        left: 0;
+
+        width: 100%;
+
+        background: #0f3d56;
+
+        display: none;
+
+        flex-direction: column;
+
+        padding: 15px;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .status-grid,
+    .announcement-grid,
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .emergency-types {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .emergency-types {
+        grid-template-columns: 1fr;
+    }
+
+    .alarm-btn {
+        width: 160px;
+
+        height: 160px;
+    }
+
+}
+```css
+/* ================= AUTOMATIC ALARM ================= */
+
+.automatic-icon {
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    background: #e0f2fe;
+
+    display: flex;
 
     align-items: center;
 
     justify-content: center;
 
-    z-index: 5000;
+    font-size: 45px;
 }
 
 
-.emergency-overlay.show {
+.automatic-status {
+
     display: flex;
-}
 
+    justify-content: center;
 
-.emergency-popup {
-    background: white;
+    align-items: center;
 
-    width: 90%;
+    gap: 10px;
 
-    max-width: 420px;
+    width: fit-content;
 
-    text-align: center;
-
-    padding: 35px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.3);
-}
-
-
-.danger-icon {
-    font-size: 55px;
-}
-
-
-.emergency-popup h2 {
-    color: #c62828;
-
-    margin: 10px;
-}
-
-
-.emergency-popup p {
-    font-size: 12px;
-
-    color: #667;
-    
-    margin: 8px;
-}
-
-
-.emergency-popup button {
-    background: #50577c;
-
-    color: white;
+    margin: 25px auto;
 
     padding: 12px 20px;
 
-    border-radius: 7px;
+    background: #ecfdf5;
 
-    margin-top: 15px;
+    color: #166534;
+
+    border-radius: 30px;
+
+    border: 1px solid #bbf7d0;
 }
 
 
+.status-light {
 
-/* MOBILE */
+    width: 12px;
+    height: 12px;
 
-@media (max-width: 800px) {
+    border-radius: 50%;
 
-    .navbar {
-        padding: 10px 5%;
+    background: #22c55e;
 
-        height: auto;
+    animation: statusBlink 1.5s infinite;
+}
 
-        flex-wrap: wrap;
+
+@keyframes statusBlink {
+
+    0% {
+        opacity: 1;
     }
 
-
-    nav {
-        order: 3;
-
-        width: 100%;
-
-        justify-content: center;
-
-        gap: 15px;
+    50% {
+        opacity: 0.3;
     }
 
-
-    .hero {
-        flex-direction: column;
-
-        gap: 30px;
-
-        padding: 35px 6%;
+    100% {
+        opacity: 1;
     }
 
+}
 
-    .weather-card {
-        width: 100%;
 
-        max-width: 400px;
+/* ================= AUTOMATIC ALARM ACTIVE ================= */
+
+.automatic-status.alarm-active {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+    border-color: #fecaca;
+}
+
+
+.automatic-status.alarm-active
+.status-light {
+
+    background: #dc2626;
+
+    animation: alarmLight 0.5s infinite;
+}
+
+
+@keyframes alarmLight {
+
+    0% {
+        opacity: 1;
     }
 
-
-    .status-grid,
-    .announcement-grid,
-    .event-grid {
-        grid-template-columns: 1fr;
+    50% {
+        opacity: 0;
     }
 
-
-    .alarm-grid {
-        grid-template-columns: 1fr 1fr;
+    100% {
+        opacity: 1;
     }
 
-
-    .monitor-content {
-        flex-direction: column;
-    }
+}
 
 
-    footer {
-        flex-direction: column;
+/* ================= STOP ALARM ================= */
 
-        gap: 15px;
+.stop-alarm-btn {
 
-        text-align: center;
-    }
+    display: none;
+
+    margin: 20px auto;
+
+    padding: 14px 25px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #374151;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.stop-alarm-btn:hover {
+
+    background: #111827;
+
+}
+
+
+.stop-alarm-btn.show {
+
+    display: block;
 
 }
