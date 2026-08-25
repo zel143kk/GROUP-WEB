@@ -1,198 +1,933 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SFHS Emergency Alert System</title>
+    <title>SFHS Emergency Alert</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* =========================
+           GENERAL
+        ========================= */
+        /* Button Styling */
+  .link-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #494E6E; /* Main blue color */
+    border: none;
+    border-radius: 8px; /* Smooth rounded corners */
+    text-decoration: none; /* Removes text underline */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+
+  /* Hover Effect */
+  .link-btn:hover {
+    background-color: #A0ADC2; /* Darker blue on hover */
+  }
+
+  /* Click/Active Effect */
+  .link-btn:active {
+    transform: scale(0.98); /* Slight click press effect */
+  }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #494E6E;
+            background: #f5f9fc;
+            position: relative;
+        }
+
+        /* BLURRED BACKGROUND LOGO */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image: url("logo.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 700px;
+
+            filter: blur(2px);
+            opacity: 10;
+
+            transform: scale(1.05);
+
+            z-index: -2;
+        }
+
+        /* White transparent layer */
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background: rgba(255,255,255,0.45);
+
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        nav {
+            height: 72px;
+            background: #494E6E;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .brand-text h2 {
+            font-size: 18px;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: #A0ADC2;
+            margin-top: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 25px 5px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #DCE4EF;
+        }
+
+        .live-status {
+            background: green ;
+            padding: 9px 13px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background: lightgreen;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 420px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 70px 9%;
+
+            background: rgba(239,247,252,0.75);
+        }
+
+        .hero-content {
+            max-width: 570px;
+        }
+
+        .monitor-badge {
+            display: inline-block;
+
+            background: #d8f8e5;
+            color: #black;
+
+            padding: 9px 15px;
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            margin-bottom: 18px;
+        }
+
+        .monitor-badge span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #494E6E;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.05;
+            color: #494E6E;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #4e6677;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 25px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-red {
+            background: #A0ADC2;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background: #494E6E;
+        }
+
+        .btn-white {
+            background: white;
+            color: #494E6E;
+            border: 1px solid #183c55;
+        }
+
+
+        /* =========================
+           WEATHER
+        ========================= */
+
+        .weather-card {
+            width: 390px;
+
+            background: rgba(7, 45, 75, 0.94);
+            color: white;
+
+            border-radius: 15px;
+            padding: 22px;
+
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .weather-header h3 {
+            font-size: 17px;
+        }
+
+        .weather-live {
+            background: #394E6E;
+            padding: 5px 9px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weather-temperature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-icon {
+            font-size: 55px;
+        }
+
+        .temperature {
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        .weather-condition {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .weather-details {
+            line-height: 2;
+            font-size: 13px;
+        }
+
+        .rain-alert {
+            margin-top: 18px;
+            background: rgba(0,0,0,0.28);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .rain-alert strong {
+            color: #ffd21c;
+        }
+
+        .forecast {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 18px;
+        }
+
+        .forecast-day {
+            background: rgba(255,255,255,0.08);
+            padding: 10px 5px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .forecast-day .icon {
+            font-size: 22px;
+            margin: 6px 0;
+        }
+
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section {
+            padding: 65px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-title h2 {
+            font-size: 29px;
+            color: #394E6E;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: black
+            ;
+        }
+
+
+        /* =========================
+           SAFETY STATUS
+        ========================= */
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 18px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 12px;
+            padding: 20px;
+
+            box-shadow: 0 5px 18px rgba(20,50,70,0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .suspension-image {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 35px;
+            font-size: 17px;
+        }
+
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            background: #394E6E;
+            border-radius: 50%;
+        }
+
+
+        /* =========================
+           ANNOUNCEMENTS
+        ========================= */
+
+        .announcement-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            max-width: 1550px;
+            margin: auto;
+        }
+
+        .announcement-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .announcement-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .announcement-text {
+            padding: 18px;
+        }
+
+        .announcement-text h3 {
+            margin-bottom: 8px;
+        }
+
+        .announcement-text p {
+            color: #A0ADC2;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           SCHOOL EVENTS
+        ========================= */
+
+        .events-section {
+            background: rgba(238,245,251,0.8);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .event-date {
+            background: #394E6E;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .event-content {
+            padding: 18px;
+        }
+
+        .event-content h3 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .event-content p {
+            color: #A0ADC2;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           EMERGENCY ALARM
+        ========================= */
+
+        .emergency-section {
+            background: rgba(255,243,243,0.88);
+        }
+
+        .alarm-container {
+            max-width: 1000px;
+            margin: auto;
+
+            background: rgba(255,255,255,0.95);
+
+            border: 1px solid #394E6E;
+            border-radius: 12px;
+
+            padding: 25px;
+        }
+
+        .alarm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .alarm-header h2 {
+            color: #394E6E;
+        }
+
+        .monitoring-active {
+            background: #dcf9e9;
+            color: #087d3e;
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .alarm-main {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .alarm-logo {
+            text-align: center;
+        }
+
+        .alarm-logo img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .alarm-status h3 {
+            font-size: 30px;
+            color: #394E6E;
+            margin: 8px 0;
+        }
+
+        .alarm-status p {
+            color: #687782;
+        }
+
+        .alert-types {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .alert-type {
+            border: 1px solid #e3e3e3;
+            border-radius: 8px;
+            padding: 18px 10px;
+            text-align: center;
+            background: white;
+        }
+
+        .alert-type .icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .alert-type strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .alert-state {
+            margin-top: 7px;
+            font-size: 11px;
+            color: #16a052;
+        }
+
+        .last-check {
+            margin-top: 20px;
+            background: #fff0f0;
+            border: 1px solid #f4baba;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #062a43;
+            color: white;
+            padding: 30px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        footer img {
+            width: 45px;
+            height: 45px;
+        }
+
+        footer p {
+            color: #b8c9d5;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 900px) {
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+            }
+
+            .hero {
+                flex-direction: column;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .buttons {
+                justify-content: center;
+            }
+
+            .weather-card {
+                width: 100%;
+                max-width: 420px;
+            }
+
+            .status-grid,
+            .announcement-grid,
+            .events-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .alarm-main {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+        }
+
+
+        @media(max-width: 600px) {
+
+            nav {
+                height: auto;
+                padding: 12px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero {
+                padding: 50px 20px;
+            }
+
+            .status-grid,
+            .announcement-grid,
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .alert-types {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .last-check {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
 
-<!-- ================= NAVIGATION ================= -->
 
-<header>
+<!-- =========================
+     NAVIGATION
+========================= -->
 
-    <nav class="navbar">
+<nav>
 
-        <div class="logo">
-            <div class="logo-icon">🚨</div>
-            <span>SFHS Emergency Alert</span>
+    <div class="brand">
+
+        <!-- YOUR LOGO -->
+        <img src="logo.jpg" alt="SFHS Emergency Logo">
+
+        <div class="brand-text">
+            <h2>SFHS Emergency Alert</h2>
+            <p>San Francisco High School</p>
         </div>
 
-        <button class="menu-btn" id="menuBtn">
-            ☰
-        </button>
-
-        <ul class="nav-links" id="navLinks">
-
-            <li>
-                <a href="#home" class="active">
-                    Home
-                </a>
-            </li>
-
-            <li>
-                <a href="#announcement">
-                    Announcement
-                </a>
-            </li>
-
-            <li>
-                <a href="#events">
-                    School Events
-                </a>
-            </li>
-
-            <li>
-                <a href="#emergency">
-                    Emergency Alert
-                </a>
-            </li>
-
-        </ul>
-
-    </nav>
-
-</header>
+    </div>
 
 
-<!-- ================= HOME ================= -->
+    <div class="nav-links">
 
-<section id="home" class="hero">
+        <a href="#home" class="active">Home</a>
+
+        <a href="#announcements">
+            Announcement
+        </a>
+
+        <a href="#events">
+            School Events
+        </a>
+
+        <a href="#emergency">
+            Emergency Alert
+        </a>
+
+    </div>
+
+
+    <div class="live-status">
+        <span class="live-dot"></span>
+        Live
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero" id="home">
 
     <div class="hero-content">
 
-        <div class="live-badge">
-            🟢 LIVE SCHOOL SAFETY MONITOR
+        <div class="monitor-badge">
+            <span></span>
+            LIVE SCHOOL SAFETY MONITOR
         </div>
 
         <h1>
-            School Emergency Alert System
+            School Emergency<br>
+            Alert System
         </h1>
 
         <p>
-            Stay updated with official Quezon City announcements,
-            class suspensions, and weather-related safety alerts.
+           The system is designed to monitor and display verified official
+           announcements and weather-related safety information.
         </p>
 
-        <div class="hero-buttons">
+        <div class="buttons">
 
-            <button
-                class="btn btn-emergency"
-                onclick="activateEmergency()">
-
+            <a href="#emergency" class="btn btn-red">
                 🚨 EMERGENCY ALERT
+            </a>
 
-            </button>
-
-            <a
-                href="#announcement"
-                class="btn btn-info">
-
+            <a href="#announcements" class="btn btn-white">
                 View Announcements
-
             </a>
 
         </div>
 
     </div>
 
-</section>
 
 
-<!-- ================= QC STATUS ================= -->
+    <!-- LIVE WEATHER -->
 
-<section class="qc-status-section">
+    <div class="weather-card">
 
-    <div class="container">
+        <div class="weather-header">
 
-        <div class="section-title">
+            <h3>
+                Live Weather • Quezon City, PH
+            </h3>
 
-            <h2>
-                📍 Quezon City Safety Status
-            </h2>
-
-            <p>
-                Monitoring official announcements and weather conditions.
-            </p>
+            <span class="weather-live">
+                LIVE
+            </span>
 
         </div>
 
 
-        <div class="status-grid">
+        <div class="weather-main">
 
-            <!-- SUSPENSION -->
+            <div class="weather-temperature">
 
-            <div class="status-card" id="suspensionCard">
-
-                <div class="status-icon">
-                
+                <div class="weather-icon" id="weatherIcon">
+                    🌤️
                 </div>
 
                 <div>
+                    <div class="temperature">
+                        <span id="temperature">--</span>°C
+                    </div>
 
-                    <h3>
-                        Latest Announcement
-                    </h3>
-
-                 <div class="container">
-                <img src="class.jpg">
-                </div>
- 
-
+                    <div class="weather-condition"
+                         id="condition">
+                        Loading...
+                    </div>
                 </div>
 
             </div>
 
 
-            <!-- WEATHER -->
+            <div class="weather-details">
 
-          <div class="status-card" id="suspensionCard">
-
-                <div class="status-icon">
-                
+                <div>
+                     Humidity:
+                    <strong id="humidity">--</strong>%
                 </div>
 
                 <div>
-
-                    <h3>
-                        Current Weather
-                    </h3>
-
-                 <div class="container">
-                <img src="weather.png">
-                </div>
- 
-                </div>
-
-            </div>
-
- 
-            <!-- SYSTEM -->
-
-            <div class="status-card">
-
-                <div class="status-icon">
-                    📡
+                     Wind:
+                    <strong id="wind">--</strong> km/h
                 </div>
 
                 <div>
+                    ️ Rain:
+                    <strong id="rain">--</strong> mm
+                </div>
 
-                    <h3>
-                        System
-                    </h3>
-
-                    <p>
-                        Online
-                    </p>
-
+                <div>
+                    ️ Feels:
+                    <strong id="feels">--</strong>°C
                 </div>
 
             </div>
+
+        </div>
+
+
+        <div class="rain-alert">
+
+            ⚠️
+            <strong id="rainTitle">
+                Weather Monitoring
+            </strong>
+
+            <p id="rainMessage">
+                Checking current weather conditions...
+            </p>
+
+        </div>
+
+
+        <div class="forecast" id="forecast">
+
+            <!-- JavaScript will insert forecast -->
 
         </div>
 
@@ -201,258 +936,119 @@
 </section>
 
 
-<!-- ================= ANNOUNCEMENTS ================= -->
 
-<section id="announcement">
+<!-- =========================
+     QUEZON CITY SAFETY STATUS
+========================= -->
 
-    <div class="container">
+<section class="section">
 
-        <div class="section-title">
+    <div class="section-title">
 
-            <h2>
-                📢 Announcements
-            </h2>
+        <h2>
+             Quezon City Safety Status
+        </h2>
 
-            <p>
-                Official and school safety announcements.
-            </p>
-
-        </div>
-
-
-        <div id="announcementList" class="announcement-grid">
-
-            <div class="announcement-card">
-
-                <h3> Loading announcements...</h3>
-
-                <p>
-                    Connecting to the Quezon City announcement service.
-                </p>
-
-        </div>
-        <div class="container">
-          <img src="class.jpg">
-        </div>
-        <div class="container">
-          <img src="qc.jpg">
-        </div>
- 
-        </div>
-
-
+        <p>
+            Monitoring official announcements and weather conditions.
+        </p>
 
     </div>
 
-</section>
+
+    <div class="status-grid">
 
 
+        <!-- CLASS SUSPENSION -->
+
+        <div class="card">
+
+            <h3>
+                Latest Class Suspension
+            </h3>
+
+            <img
+                src="class.jpg"
+                class="suspension-image"
+                alt="Class Suspension"
+            >
+
+        </div>
 
 
-<!-- ================= SCHOOL EVENTS ================= -->
+        <!-- WEATHER -->
 
-<section id="events">
+        <div class="card">
 
-    <div class="container">
-
-        <div class="section-title">
-
-            <h2>
-                📅 School Events
-            </h2>
+            <h3>
+                Live Weather
+            </h3>
 
             <p>
-                Upcoming school activities and safety drills.
+                 Quezon City, Philippines
             </p>
 
-        </div>
+            <br>
 
+            <strong>
+                Current Temperature:
+            </strong>
 
-        <div class="events-grid">
+            <span id="statusTemperature">
+                Loading...
+            </span>
 
-           <div class="events-container">
-    
-    <div class="event-card">
-        <div class="event-header">SEPTEMBER 05, 2026</div>
-        <div class="event-body">
-            <img src="" alt="" />
-            <h3>Safety Seminar</h3>
-            <p>Emergency preparedness and disaster response seminar.</p>
-        </div>
-    </div>
-    
-    <div class="event-card">
-        <div class="event-header">SEPTEMBER 15, 2026</div>
-        <div class="event-body">
-            <h3>Fire Drill</h3>
-            <p>School-wide fire evacuation drill.</p>
-        </div>
-    </div>
-    
-</div>
+            <br><br>
 
-            <div class="event-card">
+            <strong>
+                Condition:
+            </strong>
 
-                <div class="event-date">
-                    SEPTEMBER 05, 2026
-                </div>
+            <span id="statusCondition">
+                Loading...
+            </span>
 
-                <div class="event-content">
+            <br><br>
 
-                    <h3>
-                        Safety Seminar
-                    </h3>
+            <strong>
+                Rain:
+            </strong>
 
-                    <p>
-                        Emergency preparedness and disaster
-                        response seminar.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="event-card">
-
-                <div class="event-date">
-                    SEPTEMBER 15, 2026
-                </div>
-
-                <div class="event-content">
-
-                    <h3>
-                        Fire Drill
-                    </h3>
-
-                    <p>
-                        School-wide fire evacuation drill.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-<!-- ================= EMERGENCY ================= -->
-
-<section id="emergency">
-
-    <div class="container">
-
-        <div class="section-title">
-
-            <h2>
-                🚨 Emergency Alert
-            </h2>
-
-            <p>
-                The system is designed to monitor and display verified official announcements and weather-related safety information.
-            </p>
+            <span id="statusRain">
+                Loading...
+            </span>
 
         </div>
 
 
-        <div class="emergency-box">
+        <!-- SYSTEM -->
 
-            <div class="automatic-icon">
-                📡
-            </div>
+        <div class="card">
 
-            <h2>
-                Automatic Emergency Alarm
-            </h2>
+            <h3>
+                System Status
+            </h3>
 
-            <p>
-                The prototype demonstrates how an emergency alert could trigger the notification and warning system.
-            </p>
+            <div class="system-status">
 
-
-            <!-- AUTOMATIC STATUS -->
-
-            <div
-                class="automatic-status"
-                id="automaticStatus">
-
-                <span class="status-light"></span>
+                <span class="online-dot"></span>
 
                 <strong>
-                    Automatic Monitoring Active
+                    Online
                 </strong>
 
             </div>
 
+            <br>
 
-            <!-- ALARM STATUS -->
+            <p>
+                All systems operational.
+            </p>
 
-            <div
-                class="alarm-status"
-                id="alarmStatus">
+            <br>
 
-                Status: Monitoring
-
-            </div>
-
-
-            <!-- STOP ALARM -->
-
-            <button
-                class="stop-alarm-btn"
-                id="stopAlarmBtn"
-                onclick="stopEmergency()">
-
-                🔇 Stop Alarm
-
-            </button>
-
-
-            <!-- EMERGENCY TYPES -->
-
-            <div class="emergency-types">
-
-                <div class="type-card">
-                    <span>🎓</span>
-                    <strong>
-                        Class Suspension
-                    </strong>
-                </div>
-
-                <div class="type-card">
-                    <span>🌧️</span>
-                    <strong>
-                        Heavy Rain
-                    </strong>
-                </div>
-
-                <div class="type-card">
-                    <span>🔥</span>
-                    <strong>
-                        Fire
-                    </strong>
-                </div>
-
-                <div class="type-card">
-                    <span>🌎</span>
-                    <strong>
-                        Earthquake
-                    </strong>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="last-update">
-
-            🔄 Last checked:
-
-            <strong id="lastUpdate">
-                --
+            <strong style="color:#14a34a;">
+                Monitoring active
             </strong>
 
         </div>
@@ -462,7 +1058,856 @@
 </section>
 
 
-<script src="script.js"></script>
+
+<!-- =========================
+     ANNOUNCEMENTS
+========================= -->
+
+<section
+    class="section"
+    id="announcements"
+>
+
+    <div class="section-title">
+
+        <h2>
+             Announcements
+        </h2>
+
+        <p>
+            Official and school safety announcements.
+        </p>
+
+    </div>
+
+
+    <div class="announcement-grid">
+
+
+        <div class="announcement-card">
+
+            <img
+                src="class.jpg"
+                alt="Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    Class Suspension
+                </h3>
+
+                <p>
+                    Please monitor official announcements
+                    regarding class suspension.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="announcement-card">
+
+            <img
+                src="qc.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+        
+                <div class="announcement-card">
+
+            <img
+                src="11.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+         
+                 <div class="announcement-card">
+
+            <img
+                src="10.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+
+                <div class="announcement-card">
+
+            <img
+                src="7.jpg"
+                alt="School Announcement"
+            >
+
+            <div class="announcement-text">
+
+                <h3>
+                    School Safety Announcement
+                </h3>
+
+                <p>
+                    Stay informed about important school
+                    safety announcements.
+                </p>
+
+            </div>
+
+        </div>
+             
+        <div class="announcement-card">
+
+            <div class="announcement-text">
+
+                <h3>
+                    🔄 Loading announcements...
+                </h3>
+
+                <p>
+                    Connecting to the Quezon City
+                    announcement service.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     SCHOOL EVENTS
+========================= -->
+
+<section
+    class="section events-section"
+    id="events"
+>
+
+    <div class="section-title">
+
+        <h2>
+             School Events
+        </h2>
+
+        <p>
+            Upcoming school activities and safety drills.
+        </p>
+
+    </div>
+
+
+    <div class="events-grid">
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                July 27, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>ICYM|2026</b></h3>
+
+               <a href="https://www.facebook.com/photo/?fbid=1535715368567957&set=pcb.1535717268567767" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 20, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>A NEW HOME LEARNING</b></h3>
+                <a href="https://www.facebook.com/photo/?fbid=1500457402093754&set=pcb.1500457755427052" target="_blank" class="link-btn"> Visit Announcement</a>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 18, 2026
+            </div>
+
+            <div class="event-content">
+                
+                    <h3><b>2ND QUARTER NATIONAL SIMULTANEUOS EARTHQUAKE DRILL</b>(NSED)</h></h3>
+
+                <a href="https://www.facebook.com/photo?fbid=1499579695514858&set=pcb.1499581432181351" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="event-card">
+
+            <div class="event-date">
+                June 8, 2026
+            </div>
+
+            <div class="event-content">
+
+                <h3><b>FIRST FLAG CEREMONY|SY. 2026-2027</b></h3>
+
+                <a href="https://www.facebook.com/photo/?fbid=1489100746562753&set=pcb.1489101769895984" target="_blank" class="link-btn"> Visit Announcement</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     AUTOMATIC EMERGENCY ALARM
+========================= -->
+
+<section
+    class="section emergency-section"
+    id="emergency"
+>
+
+    <div class="section-title">
+
+        <h2>
+             Automatic Emergency Alarm
+        </h2>
+
+        <p>
+            The prototype demonstrates how an emergency alert
+            could trigger the notification and warning system.
+        </p>
+
+    </div>
+
+
+    <div class="alarm-container">
+
+
+        <div class="alarm-header">
+
+            <h2>
+                 Automatic Monitoring
+            </h2>
+
+            <div class="monitoring-active">
+                🟢 Automatic Monitoring Active
+            </div>
+
+        </div>
+
+
+        <div class="alarm-main">
+
+
+            <!-- LOGO -->
+
+            <div class="alarm-logo">
+
+                <img
+                    src="logo.jpg"
+                    alt="Emergency Alarm Logo"
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="alarm-status">
+
+                <p>
+                    Monitoring Status
+                </p>
+
+                <h3 id="alarmStatus">
+                    ACTIVE
+                </h3>
+
+                <p>
+                    The system is currently monitoring
+                    weather conditions.
+                </p>
+
+
+                <div class="alert-types">
+
+
+                    <div class="alert-type">
+
+                        
+
+                        <strong>
+                            Class Suspension
+                        </strong>
+
+                        <div
+                            class="alert-state"
+                            id="suspensionState"
+                        >
+                            No suspension
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-type">
+
+                        <strong>
+                            Heavy Rain
+                        </strong>
+
+                        <div
+                            class="alert-state"
+                            id="rainState"
+                        >
+                            Monitoring
+                        </div>
+
+                    </div>
+
+
+                    <div class="alert-type">
+
+                        
+                        <strong>
+                            Fire
+                        </strong>
+
+                        <div class="alert-state">
+                            No alert
+                        
+                    </div>
+                    </div>
+
+
+                    <div class="alert-type">
+                        <strong>
+                            Earthquake
+                        </strong>
+
+                        <div class="alert-state">
+                            No alert
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="last-check">
+
+            <span>
+                🔴 Last Checked:
+                <strong id="lastChecked">
+                    --
+                </strong>
+            </span>
+
+            <span>
+                Next check: 10 minutes
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <img src="logo.jpg">
+        <div>
+
+            <strong>
+                SFHS Emergency Alert
+            </strong>
+
+            <p>
+                San Francisco High School
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <p>
+        © 2026 SFHS Emergency Alert System.
+        All rights reserved.
+    </p>
+
+</footer>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+    /*
+        QUEZON CITY LOCATION
+
+        Latitude: 14.6511
+        Longitude: 121.0486
+    */
+
+    const LATITUDE = 14.6511;
+    const LONGITUDE = 121.0486;
+
+
+    /*
+        WEATHER DESCRIPTION
+    */
+
+    function getWeatherDescription(code) {
+
+        const weatherCodes = {
+
+            0: "Clear Sky",
+
+            1: "Mainly Clear",
+            2: "Partly Cloudy",
+            3: "Overcast",
+
+            45: "Foggy",
+            48: "Foggy",
+
+            51: "Light Drizzle",
+            53: "Drizzle",
+            55: "Heavy Drizzle",
+
+            61: "Light Rain",
+            63: "Moderate Rain",
+            65: "Heavy Rain",
+
+            71: "Light Snow",
+            73: "Snow",
+            75: "Heavy Snow",
+
+            80: "Rain Showers",
+            81: "Rain Showers",
+            82: "Heavy Rain Showers",
+
+            95: "Thunderstorm",
+            96: "Thunderstorm",
+            99: "Severe Thunderstorm"
+
+        };
+
+        return weatherCodes[code] || "Unknown Weather";
+    }
+
+
+    /*
+        WEATHER ICON
+    */
+
+    function getWeatherIcon(code) {
+
+        if (code === 0) {
+            return "☀️";
+        }
+
+        if (code >= 1 && code <= 3) {
+            return "🌤️";
+        }
+
+        if (code >= 45 && code <= 48) {
+            return "🌫️";
+        }
+
+        if (code >= 51 && code <= 67) {
+            return "🌧️";
+        }
+
+        if (code >= 80 && code <= 82) {
+            return "🌧️";
+        }
+
+        if (code >= 95) {
+            return "⛈️";
+        }
+
+        return "🌤️";
+    }
+
+
+    /*
+        GET LIVE WEATHER
+    */
+
+    async function getWeather() {
+
+        try {
+
+            const url =
+                `https://api.open-meteo.com/v1/forecast` +
+                `?latitude=${LATITUDE}` +
+                `&longitude=${LONGITUDE}` +
+                `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m` +
+                `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+                `&timezone=Asia%2FManila`;
+
+
+            const response = await fetch(url);
+
+
+            if (!response.ok) {
+                throw new Error("Weather request failed");
+            }
+
+
+            const data = await response.json();
+
+
+            /*
+                CURRENT WEATHER
+            */
+
+            const current = data.current;
+
+
+            const temperature =
+                Math.round(current.temperature_2m);
+
+            const feels =
+                Math.round(current.apparent_temperature);
+
+            const humidity =
+                Math.round(current.relative_humidity_2m);
+
+            const wind =
+                Math.round(current.wind_speed_10m);
+
+            const rain =
+                current.precipitation;
+
+            const code =
+                current.weather_code;
+
+
+            const description =
+                getWeatherDescription(code);
+
+
+            const icon =
+                getWeatherIcon(code);
+
+
+            /*
+                UPDATE WEATHER CARD
+            */
+
+            document.getElementById("temperature")
+                .textContent = temperature;
+
+            document.getElementById("condition")
+                .textContent = description;
+
+            document.getElementById("weatherIcon")
+                .textContent = icon;
+
+            document.getElementById("humidity")
+                .textContent = humidity;
+
+            document.getElementById("wind")
+                .textContent = wind;
+
+            document.getElementById("rain")
+                .textContent = rain;
+
+            document.getElementById("feels")
+                .textContent = feels;
+
+
+            /*
+                UPDATE STATUS CARD
+            */
+
+            document.getElementById("statusTemperature")
+                .textContent = ` ${temperature}°C`;
+
+            document.getElementById("statusCondition")
+                .textContent = ` ${description}`;
+
+            document.getElementById("statusRain")
+                .textContent = ` ${rain} mm`;
+
+
+            /*
+                AUTOMATIC RAIN MONITORING
+            */
+
+            const rainState =
+                document.getElementById("rainState");
+
+            const rainTitle =
+                document.getElementById("rainTitle");
+
+            const rainMessage =
+                document.getElementById("rainMessage");
+
+
+            if (
+                code === 65 ||
+                code === 82 ||
+                code === 95 ||
+                code === 96 ||
+                code === 99
+            ) {
+
+                rainState.textContent =
+                    "⚠️ ACTIVE";
+
+                rainState.style.color =
+                    "#e12626";
+
+                rainTitle.textContent =
+                    "Heavy Rain / Storm Alert";
+
+                rainMessage.textContent =
+                    "Severe weather conditions detected in Quezon City.";
+
+            }
+
+            else if (
+                code >= 51 &&
+                code <= 82
+            ) {
+
+                rainState.textContent =
+                    "Rain detected";
+
+                rainState.style.color =
+                    "#e09b00";
+
+                rainTitle.textContent =
+                    "Rain Detected";
+
+                rainMessage.textContent =
+                    "Rain is currently being monitored.";
+
+            }
+
+            else {
+
+                rainState.textContent =
+                    "No heavy rain";
+
+                rainState.style.color =
+                    "#16a052";
+
+                rainTitle.textContent =
+                    "Weather Monitoring";
+
+                rainMessage.textContent =
+                    "No severe weather detected.";
+
+            }
+
+
+            /*
+                FORECAST
+            */
+
+            const forecast =
+                document.getElementById("forecast");
+
+            forecast.innerHTML = "";
+
+
+            for (
+                let i = 0;
+                i < 5;
+                i++
+            ) {
+
+                const date =
+                    new Date(
+                        data.daily.time[i]
+                    );
+
+
+                const day =
+                    date.toLocaleDateString(
+                        "en-US",
+                        {
+                            weekday: "short"
+                        }
+                    );
+
+
+                const max =
+                    Math.round(
+                        data.daily.temperature_2m_max[i]
+                    );
+
+
+                const min =
+                    Math.round(
+                        data.daily.temperature_2m_min[i]
+                    );
+
+
+                const dailyCode =
+                    data.daily.weather_code[i];
+
+
+                const dailyIcon =
+                    getWeatherIcon(dailyCode);
+
+
+                forecast.innerHTML += `
+
+                    <div class="forecast-day">
+
+                        <strong>
+                            ${day}
+                        </strong>
+
+                        <div class="icon">
+                            ${dailyIcon}
+                        </div>
+
+                        ${max}° / ${min}°
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /*
+                LAST CHECKED
+            */
+
+            const now =
+                new Date();
+
+
+            document.getElementById("lastChecked")
+                .textContent =
+                now.toLocaleTimeString(
+                    "en-PH",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit"
+                    }
+                );
+
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document.getElementById("condition")
+                .textContent =
+                "Weather unavailable";
+
+            document.getElementById("rainMessage")
+                .textContent =
+                "Unable to connect to the weather service.";
+
+        }
+
+    }
+
+
+    /*
+        LOAD WEATHER
+    */
+
+    getWeather();
+
+
+    /*
+        UPDATE EVERY 10 MINUTES
+    */
+
+    setInterval(
+        getWeather,
+        10 * 60 * 1000
+    );
+
+</script>
+
 
 </body>
-
+</html>
