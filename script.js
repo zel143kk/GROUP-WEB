@@ -1,301 +1,154 @@
-/* =========================================
-   SFHS EMERGENCY ALERT SYSTEM
-========================================= */
+// ==========================================
+// SFHS EMERGENCY ALERT SYSTEM
+// ==========================================
 
 
-/* =========================================
-   WEATHER DISPLAY
-========================================= */
+// ==========================================
+// MOBILE NAVIGATION
+// ==========================================
 
-const weather = {
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
 
-    temperature: "--",
-    humidity: "--",
-    rain: "--",
-    wind: "--",
-    feels: "--",
-    condition: "Weather unavailable"
+menuBtn.addEventListener("click", function () {
 
-};
+    navLinks.classList.toggle("show");
 
+});
 
-/*
-    PAGASA SOURCE
 
-    PAGASA currently publishes the
-    Science Garden, Quezon City weather
-    station information.
+document.querySelectorAll(".nav-links a").forEach(link => {
 
-    Official source:
-    https://www.pagasa.dost.gov.ph/
-*/
+    link.addEventListener("click", function () {
 
+        navLinks.classList.remove("show");
 
-function displayWeather() {
+    });
 
-    document.getElementById("temperature").textContent =
-        weather.temperature + "°C";
+});
 
-    document.getElementById("humidity").textContent =
-        weather.humidity;
 
-    document.getElementById("rain").textContent =
-        weather.rain;
+```javascript
+// ==========================================
+// AUTOMATIC EMERGENCY ALARM
+// ==========================================
 
-    document.getElementById("wind").textContent =
-        weather.wind;
+const modal =
+    document.getElementById("emergencyModal");
 
-    document.getElementById("feels").textContent =
-        weather.feels;
+const alarmStatus =
+    document.getElementById("alarmStatus");
 
-    document.getElementById("condition").textContent =
-        weather.condition;
+const modalTitle =
+    document.getElementById("modalTitle");
 
+const modalMessage =
+    document.getElementById("modalMessage");
 
-    document.getElementById("temperature2").textContent =
-        weather.temperature + "°C";
+const automaticStatus =
+    document.getElementById("automaticStatus");
 
-    document.getElementById("condition2").textContent =
-        weather.condition;
+const stopAlarmBtn =
+    document.getElementById("stopAlarmBtn");
 
-    document.getElementById("rain2").textContent =
-        weather.rain + " mm/hr";
 
+let alarmActive = false;
 
-    document.getElementById("lastChecked").textContent =
-        new Date().toLocaleTimeString(
-            "en-PH",
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+let audioContext = null;
 
-}
+let oscillator = null;
 
+let gainNode = null;
 
-/* =========================================
-   PAGASA API CONNECTION
-========================================= */
 
-/*
-    IMPORTANT:
+// ==========================================
+// START ALARM SOUND
+// ==========================================
 
-    Do NOT place a PAGASA API token here.
-
-    PAGASA's Ten-Day Weather Forecast API
-    requires approved authorization.
-
-    Once you have an approved API token,
-    connect it through your server/backend.
-*/
-
-
-async function loadPAGASAWeather() {
-
-    const message =
-        document.getElementById("weatherMessage");
-
-
-    message.innerHTML = `
-        <strong>🌐 PAGASA Weather Monitoring</strong>
-        <p>
-            Connecting to official PAGASA weather data...
-        </p>
-    `;
-
-
-    /*
-        The frontend cannot safely scrape PAGASA's
-        website directly.
-
-        For GitHub Pages, use your approved
-        server/API endpoint here.
-
-        Example:
-
-        const response =
-            await fetch("/api/pagasa-weather");
-
-        const data =
-            await response.json();
-
-        weather.temperature = data.temperature;
-        weather.humidity = data.humidity;
-        weather.rain = data.rain;
-        weather.wind = data.wind;
-        weather.condition = data.condition;
-    */
-
-
-    message.innerHTML = `
-        <strong>✓ PAGASA Weather Source</strong>
-        <p>
-            Weather monitoring is linked to the
-            official DOST-PAGASA source.
-        </p>
-    `;
-
-
-    document.getElementById("systemMessage").textContent =
-        "PAGASA monitoring source connected.";
-
-}
-
-
-/* =========================================
-   AUTOMATIC MONITORING
-========================================= */
-
-function runMonitoring() {
-
-    const systemStatus =
-        document.getElementById("systemStatus");
-
-
-    systemStatus.innerHTML =
-        "● Online";
-
-
-    document.getElementById(
-        "monitorStatus"
-    ).textContent =
-        "ACTIVE";
-
-
-    document.getElementById(
-        "lastChecked"
-    ).textContent =
-        new Date().toLocaleTimeString(
-            "en-PH",
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
-
-}
-
-
-/* =========================================
-   ANNOUNCEMENTS
-========================================= */
-
-function scrollToAnnouncements() {
-
-    document
-        .getElementById("announcements")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-
-}
-
-
-/* =========================================
-   EMERGENCY ALERT
-========================================= */
-
-const emergencyButton =
-    document.getElementById(
-        "emergencyButton"
-    );
-
-
-emergencyButton.addEventListener(
-    "click",
-    function () {
-
-        document
-            .getElementById(
-                "emergencyOverlay"
-            )
-            .classList.add("show");
-
-
-        startAlarm();
-
-    }
-);
-
-
-/* =========================================
-   CLOSE EMERGENCY
-========================================= */
-
-function closeEmergency() {
-
-    document
-        .getElementById(
-            "emergencyOverlay"
-        )
-        .classList.remove("show");
-
-}
-
-
-/* =========================================
-   ALARM
-========================================= */
-
-function startAlarm() {
+function startAlarmSound() {
 
     try {
 
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
 
 
-        const audio =
-            new AudioContext();
+        oscillator =
+            audioContext.createOscillator();
 
 
-        const oscillator =
-            audio.createOscillator();
-
-
-        const gain =
-            audio.createGain();
-
-
-        oscillator.connect(gain);
-
-        gain.connect(
-            audio.destination
-        );
-
-
-        oscillator.frequency.value =
-            800;
+        gainNode =
+            audioContext.createGain();
 
 
         oscillator.type =
             "square";
 
 
-        gain.gain.value =
+        oscillator.frequency.value =
+            800;
+
+
+        gainNode.gain.value =
             0.08;
+
+
+        oscillator.connect(
+            gainNode
+        );
+
+
+        gainNode.connect(
+            audioContext.destination
+        );
 
 
         oscillator.start();
 
 
-        setTimeout(
-            function () {
+        let high = false;
 
-                oscillator.stop();
 
-            },
-            1000
-        );
+        const alarmInterval =
+            setInterval(function () {
+
+                if (!alarmActive) {
+
+                    clearInterval(
+                        alarmInterval
+                    );
+
+                    return;
+
+                }
+
+
+                high = !high;
+
+
+                oscillator.frequency
+                    .setValueAtTime(
+
+                        high
+                        ? 1000
+                        : 600,
+
+                        audioContext.currentTime
+
+                    );
+
+
+            }, 500);
 
     }
 
     catch (error) {
 
         console.log(
-            "Alarm audio unavailable."
+            "Browser blocked automatic audio."
         );
 
     }
@@ -303,74 +156,521 @@ function startAlarm() {
 }
 
 
-/* =========================================
-   INTERNET STATUS
-========================================= */
+// ==========================================
+// AUTOMATIC ALARM
+// ==========================================
 
-function updateConnectionStatus() {
+function activateAutomaticAlarm(
+    title,
+    message
+) {
 
-    const status =
-        document.getElementById(
-            "systemStatus"
+    if (alarmActive) {
+
+        return;
+
+    }
+
+
+    alarmActive = true;
+
+
+    modalTitle.textContent =
+        title;
+
+
+    modalMessage.textContent =
+        message;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    alarmStatus.textContent =
+        "🚨 AUTOMATIC ALARM ACTIVE";
+
+
+    alarmStatus.classList.add(
+        "active"
+    );
+
+
+    automaticStatus.classList.add(
+        "alarm-active"
+    );
+
+
+    automaticStatus.innerHTML = `
+
+        <span class="status-light"></span>
+
+        <strong>
+            🚨 EMERGENCY DETECTED
+        </strong>
+
+    `;
+
+
+    stopAlarmBtn.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    startAlarmSound();
+
+}
+
+
+// ==========================================
+// STOP ALARM
+// ==========================================
+
+function stopEmergency() {
+
+    alarmActive = false;
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+
+    alarmStatus.textContent =
+        "Status: Monitoring";
+
+
+    alarmStatus.classList.remove(
+        "active"
+    );
+
+
+    automaticStatus.classList.remove(
+        "alarm-active"
+    );
+
+
+    automaticStatus.innerHTML = `
+
+        <span class="status-light"></span>
+
+        <strong>
+            Automatic Monitoring Active
+        </strong>
+
+    `;
+
+
+    stopAlarmBtn.classList.remove(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "auto";
+
+
+    if (oscillator) {
+
+        try {
+
+            oscillator.stop();
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Alarm already stopped."
+            );
+
+        }
+
+    }
+
+
+    if (audioContext) {
+
+        audioContext.close();
+
+        audioContext = null;
+
+    }
+
+}
+
+
+// ==========================================
+// CHECK QC SUSPENSION
+// ==========================================
+
+async function checkQCAnnouncements() {
+
+    try {
+
+        const response =
+            await fetch(
+                "api.php?action=announcements"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "API connection failed."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                "Announcement service unavailable."
+            );
+
+        }
+
+
+        displayAnnouncements(
+            data.announcements
         );
 
 
-    if (navigator.onLine) {
+        checkForSuspension(
+            data.announcements
+        );
 
-        status.innerHTML =
-            "● Online";
 
-        status.style.color =
-            "#15952c";
+        updateLastChecked();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "suspensionStatus"
+        ).textContent =
+
+            "Unable to check official QC announcements.";
+
+    }
+
+}
+
+
+// ==========================================
+// DETECT SUSPENSION
+// ==========================================
+
+function checkForSuspension(
+    announcements
+) {
+
+    const status =
+        document.getElementById(
+            "suspensionStatus"
+        );
+
+
+    const card =
+        document.getElementById(
+            "suspensionCard"
+        );
+
+
+    const suspension =
+        announcements.find(
+            announcement => {
+
+                const text = (
+
+                    announcement.title +
+                    " " +
+                    announcement.description
+
+                ).toLowerCase();
+
+
+                return (
+
+                    text.includes(
+                        "class suspension"
+                    )
+
+                    ||
+
+                    text.includes(
+                        "walang pasok"
+                    )
+
+                    ||
+
+                    text.includes(
+                        "classes suspended"
+                    )
+
+                );
+
+            }
+        );
+
+
+    if (suspension) {
+
+        status.textContent =
+            "🚨 Official suspension detected.";
+
+        card.classList.add(
+            "danger"
+        );
+
+
+        /*
+         * Create a unique ID for
+         * this announcement.
+         */
+
+        const alertID =
+            suspension.id ||
+            suspension.title;
+
+
+        const previousAlert =
+            localStorage.getItem(
+                "lastSuspensionAlert"
+            );
+
+
+        /*
+         * Only sound the alarm when
+         * this is a NEW announcement.
+         */
+
+        if (
+            previousAlert !==
+            alertID
+        ) {
+
+            localStorage.setItem(
+                "lastSuspensionAlert",
+                alertID
+            );
+
+
+            activateAutomaticAlarm(
+
+                "🚨 CLASS SUSPENSION",
+
+                suspension.title +
+                ". Please check the official Quezon City Government announcement for complete details."
+
+            );
+
+        }
 
     }
 
     else {
 
-        status.innerHTML =
-            "● Offline";
+        status.textContent =
+            "No official suspension detected.";
 
-        status.style.color =
-            "#d62828";
-
-        document.getElementById(
-            "systemMessage"
-        ).textContent =
-            "Internet connection unavailable.";
+        card.classList.remove(
+            "danger"
+        );
 
     }
 
 }
 
 
-window.addEventListener(
-    "online",
-    updateConnectionStatus
-);
+// ==========================================
+// DISPLAY ANNOUNCEMENTS
+// ==========================================
+
+function displayAnnouncements(
+    announcements
+) {
+
+    const list =
+        document.getElementById(
+            "announcementList"
+        );
 
 
-window.addEventListener(
-    "offline",
-    updateConnectionStatus
-);
+    if (
+        !announcements ||
+        announcements.length === 0
+    ) {
+
+        list.innerHTML = `
+
+            <div class="announcement-card">
+
+                <h3>
+                    No New Announcements
+                </h3>
+
+                <p>
+                    No recent official announcements
+                    were detected.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
 
-/* =========================================
-   START SYSTEM
-========================================= */
-
-displayWeather();
-
-runMonitoring();
-
-loadPAGASAWeather();
+    list.innerHTML = "";
 
 
-/*
-    Check every 10 minutes.
-*/
+    announcements.forEach(
+        announcement => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "announcement-card";
+
+
+            card.innerHTML = `
+
+                <h3>
+                    ${escapeHTML(
+                        announcement.title
+                    )}
+                </h3>
+
+                <p>
+                    ${escapeHTML(
+                        announcement.description
+                    )}
+                </p>
+
+                <span class="date">
+                    ${escapeHTML(
+                        announcement.date
+                    )}
+                </span>
+
+                ${
+                    announcement.url
+
+                    ?
+
+                    `
+                    <a
+                        href="${announcement.url}"
+                        target="_blank"
+                        rel="noopener">
+
+                        View Official Announcement →
+
+                    </a>
+                    `
+
+                    :
+
+                    ""
+                }
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// SECURITY
+// ==========================================
+
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text || "";
+
+
+    return div.innerHTML;
+
+}
+
+
+// ==========================================
+// LAST CHECKED
+// ==========================================
+
+function updateLastChecked() {
+
+    const now =
+        new Date();
+
+
+    document.getElementById(
+        "lastUpdate"
+    ).textContent =
+
+        now.toLocaleString(
+            "en-PH"
+        );
+
+}
+
+
+// ==========================================
+// START MONITORING
+// ==========================================
+
+checkQCAnnouncements();
+
+checkRain();
+
+
+// Check every 5 minutes
 
 setInterval(
-    loadPAGASAWeather,
-    10 * 60 * 1000
+    checkQCAnnouncements,
+    5 * 60 * 1000
 );
+
+
+setInterval(
+    checkRain,
+    5 * 60 * 1000
+);
+```
